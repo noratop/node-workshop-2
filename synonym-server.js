@@ -13,30 +13,58 @@ var requestListener = function (req, response) {
 
         request(thesaurusReauestUrl, function(err, res, body) {
             
-            var output = '\nHere are the synonyms found for the "'+ word +'":\n';
+            var output = '<h1>Here are the synonyms found for the word "'+ word +'":</h1>';
+            
             
             if (!err){
                 var data = JSON.parse(body);
                 
                 console.log(data);
                 
+                output += "\n<ul>";
+
                 if (data.adverb){
-                    output += "\n\n\tAs an adverb: " + data.adverb.syn;
+                    //console.log(data.adverb.syn);
+                    output += "\n<li><b>As an adverb:</b></li>";
+                    output += "\n<ul>";
+                    data.adverb.syn.forEach(function(elt){
+                        output += "\n<li>"+elt+'</li>';
+                    });
+                    output += "\n</ul>";
                 }
                 if (data.adjective){
-                    output += "\n\n\tAs an adjective: " + data.adjective.syn;
+                    output += "\n<li><b>As an adjective:</b></li>";
+                    output += "\n<ul>";
+                    data.adjective.syn.forEach(function(elt){
+                        output += "\n<li>"+elt+'</li>';
+                    });
+                    output += "\n</ul>";
                 }
                 if (data.noun){
-                    output += "\n\n\tAs an noun: " + data.noun.syn;
+                    output += "\n<li><b>As a noun:</b></li>";
+                    output += "\n<ul>";
+                    data.noun.syn.forEach(function(elt){
+                        output += "\n<li>"+elt+'</li>';
+                    });
+                    output += "\n</ul>";
                 }
                 if (data.verb){
-                    output += "\n\n\tAs an verb: " + data.verb.syn;
+                    output += "\n<li><b>As a verb:</b></li>";
+                    output += "\n<ul>";
+                    data.verb.syn.forEach(function(elt){
+                        output += "\n<li>"+elt+'</li>';
+                    });
+                    output += "\n</ul>";
                 }
+                
+                output += "\n</ul>";
             }
             else {
                 output = 'Sorry no result was found for this word';
             }
             
+            console.log(output);
+
             response.writeHead(200);        
             response.end(output);
             
